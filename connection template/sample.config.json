@@ -1,0 +1,15 @@
+{
+  "db": {
+    "ip": "localhost",
+    "port": 27017,
+    "db_name": "dbName",
+    "collection":"collectionName",
+    "username": "username",
+    "password": "password",
+    "authDB": "admin"
+  },
+  "server": {
+    "ip": "localhost",
+    "port": 3000
+  }
+}
