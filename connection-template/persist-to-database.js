@@ -1,5 +1,6 @@
 const { MongoClient } = require("mongodb");
 const config = require('./config.json');
+const fs = require('fs');
 
 const db_name = config.db.db_name;
 const collection_name = config.db.collection;
@@ -12,7 +13,7 @@ if(config.db.username){
 
 
 const client = new MongoClient(uri);
-
+let allQuestions = []
 
 async function run() {
 	try {
@@ -25,7 +26,7 @@ async function run() {
 				//write fields used to get data. leave blank to get all
 				//example:
 				// _id: ObjectId("5ffdd0d35590063ba07fad39")
-			})
+			}).limit(10)
 
 		let bulk = client.db(db_name).collection(collection_name).initializeUnorderedBulkOp();
 
@@ -33,8 +34,8 @@ async function run() {
 
 			//the document
 			let doc = await questionCursor.next();
-			console.log(doc);
-
+			// console.log(doc);
+			allQuestions.push(doc)
 			//change fields of document (doc) that needs updating
 
 
@@ -61,6 +62,12 @@ async function run() {
 
 	} finally {
 		await client.close();
+		fs.appendFile('file.txt', JSON.stringify(allQuestions, null, '\t'), err => {
+			if (err) {
+				console.error(err);
+			}
+			// done!
+		});
 	}
 }
 
